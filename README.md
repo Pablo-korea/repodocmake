@@ -41,6 +41,11 @@ target; with `--out`, they go to that preview directory instead.
 | `--dry-run`   | Generate without writing to the repo (use with `--out`).           |
 | `--out`       | Write docs to a preview directory instead of in place.             |
 
+### CLI demo
+https://github.com/user-attachments/assets/a588d79b-410d-4535-a610-e92f913764a8
+
+
+
 ## GitHub Action usage
 
 ```yaml
