@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 import click
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 from . import vcs
 from .config import Config
@@ -19,7 +19,10 @@ from .pipeline import run
 def main() -> None:
     """RepoDocMake — generate OSS docs by analyzing a repository."""
     # Load API keys / settings from a local .env (real LLM runs), if present.
-    load_dotenv()
+    # usecwd=True searches from the current working directory (where the user
+    # runs the command) rather than the installed package location, so a .env
+    # in the user's project is found when repodocmake is pip-installed.
+    load_dotenv(find_dotenv(usecwd=True))
 
 
 @main.command()
