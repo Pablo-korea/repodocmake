@@ -1,8 +1,11 @@
 """Command-line entrypoint: `repodocmake generate <target> ...`."""
 from __future__ import annotations
 
+import itertools
 import os
 import sys
+import threading
+import time
 from pathlib import Path
 
 import click
@@ -12,6 +15,51 @@ from . import vcs
 from .config import Config
 from .models import DocKind, Mode
 from .pipeline import run
+
+
+class _Spinner:
+    """Tiny background-thread progress indicator for the long LLM calls.
+
+    Uses ASCII frames only (some Windows consoles, e.g. cp949, crash on fancy
+    unicode), writes to stderr with a carriage return so it never pollutes the
+    stdout result lines, and animates only on a real TTY (piped/CI output gets
+    plain one-line messages instead).
+    """
+
+    def __init__(self) -> None:
+        self._label = "Working"
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+        self._tty = sys.stderr.isatty()
+
+    def set(self, label: str) -> None:
+        self._label = label
+        if not self._tty:  # no animation when redirected — just log the step
+            click.echo(f"... {label}", err=True)
+
+    def __enter__(self) -> "_Spinner":
+        if self._tty:
+            self._thread = threading.Thread(target=self._spin, daemon=True)
+            self._thread.start()
+        return self
+
+    def _spin(self) -> None:
+        frames = itertools.cycle("|/-\\")
+        start = time.monotonic()
+        while not self._stop.is_set():
+            elapsed = time.monotonic() - start
+            try:
+                click.echo(f"\r{next(frames)} {self._label}... ({elapsed:.0f}s)  ", nl=False, err=True)
+            except Exception:  # never let a display glitch break generation
+                return
+            time.sleep(0.12)
+
+    def __exit__(self, *exc) -> None:
+        self._stop.set()
+        if self._thread:
+            self._thread.join()
+        if self._tty:
+            click.echo("\r" + " " * 50 + "\r", nl=False, err=True)
 
 
 @click.group()
@@ -65,7 +113,11 @@ def generate(target, files, license_id, holder, language, mode, out_dir, dry_run
         provider=provider,
         model=model,
     )
-    docs = run(config)  # writes to out_dir itself when --out is given
+    # Show live progress: the LLM calls can take tens of seconds per doc, so
+    # without this the terminal just sits on a blinking cursor.
+    with _Spinner() as spinner:
+        spinner.set("Analyzing repository")
+        docs = run(config, on_progress=lambda name: spinner.set(f"Generating {name}"))
 
     # No --out: write in place into the target repo (skip in dry-run, which is
     # a no-touch preview). run() already wrote when --out was given.

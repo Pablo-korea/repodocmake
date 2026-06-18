@@ -8,6 +8,7 @@ gate is where a self-correcting regeneration round hooks in.
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from pathlib import Path
 
 from .analyzer import scan_repository
@@ -102,7 +103,13 @@ def missing_docs(config: Config) -> list[str]:
     ]
 
 
-def run(config: Config) -> list[GeneratedDoc]:
+def run(config: Config, on_progress: Callable[[str], None] | None = None) -> list[GeneratedDoc]:
+    """Generate the requested docs.
+
+    on_progress, if given, is called with the name of each document right
+    before it is synthesized (e.g. for a CLI spinner/status line). It is never
+    called for skipped docs.
+    """
     profile = scan_repository(config.target)
     client = get_client(config.provider, config.model, mock=config.dry_run)
 
@@ -120,6 +127,8 @@ def run(config: Config) -> list[GeneratedDoc]:
             )
             continue
 
+        if on_progress:
+            on_progress(kind.value)
         results.append(_synthesize(gen, profile, client, config))
 
     # --out is an explicit preview destination (never the source repo), so we

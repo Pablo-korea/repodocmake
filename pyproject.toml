@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "repodocmake"
-version = "0.1.1"
+version = "0.1.2"
 description = "AI-powered open-source documentation generator (GitHub Action + CLI)"
 readme = "README.md"
 requires-python = ">=3.11"
