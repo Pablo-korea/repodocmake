@@ -22,4 +22,4 @@ jobs:
       - run: ruff check src tests
       - run: pytest -q
         env:
-          DOCFORGEAI_MOCK_LLM: "1"
+          REPODOCMAKE_MOCK_LLM: "1"

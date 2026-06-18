@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from docforgeai.analyzer import scan_repository
+from repodocmake.analyzer import scan_repository
 
 
 def _make_repo(tmp_path: Path) -> Path:

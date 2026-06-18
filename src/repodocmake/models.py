@@ -1,4 +1,4 @@
-"""Pydantic schemas shared across DocForgeAI.
+"""Pydantic schemas shared across RepoDocMake.
 
 These types are the strongly-typed contract between the deterministic
 analysis layer (repo scanner / AST profiler) and the LLM synthesis layer.

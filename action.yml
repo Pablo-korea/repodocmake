@@ -1,4 +1,4 @@
-name: "DocForgeAI"
+name: "RepoDocMake"
 description: "AI-powered open-source documentation generator. Analyzes the repo and generates README, LICENSE, CONTRIBUTING, DEVELOPER_GUIDE."
 author: "DevOps_Agent"
 branding:

@@ -26,7 +26,7 @@ _PIP_INSTALL = re.compile(r"pip install\s+(?:-[^\s]+\s+)*([A-Za-z0-9._\-\[\]]+)"
 def _pkg_base(name: str) -> str:
     """Normalize a requirement to a comparable base name.
 
-    Strips version specifiers / extras (`pydantic>=2.6`, `docforgeai[dev]`) and
+    Strips version specifiers / extras (`pydantic>=2.6`, `repodocmake[dev]`) and
     folds the PyPI-equivalent `_`/`-` so comparisons are robust.
     """
     base = re.split(r"[<>=!;\[ ]", name.strip())[0]
@@ -88,7 +88,7 @@ def _synthesize(gen, profile: RepoProfile, client: LLMClient,
 
 
 def missing_docs(config: Config) -> list[str]:
-    """Requested docs that DocForgeAI can generate but that don't yet exist.
+    """Requested docs that RepoDocMake can generate but that don't yet exist.
 
     This is the `check` mode core: a purely deterministic drift signal that
     touches no files and makes no LLM calls. Docs with no generator (e.g.

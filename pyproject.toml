@@ -3,13 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "docforgeai"
+name = "repodocmake"
 version = "0.1.0"
 description = "AI-powered open-source documentation generator (GitHub Action + CLI)"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
-authors = [{ name = "DocForgeAI Team" }]
+authors = [{ name = "RepoDocMake Team" }]
 keywords = ["documentation", "ai", "llm", "github-action", "readme", "oss"]
 dependencies = [
     "pydantic>=2.6",
@@ -23,13 +23,13 @@ dependencies = [
 dev = ["pytest>=8.0", "ruff>=0.4"]
 
 [project.scripts]
-docforgeai = "docforgeai.cli:main"
+repodocmake = "repodocmake.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/Pablo-korea/docforgeai"
+Homepage = "https://github.com/Pablo-korea/repodocmake"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/docforgeai"]
+packages = ["src/repodocmake"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

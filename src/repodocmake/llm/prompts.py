@@ -6,7 +6,7 @@ from __future__ import annotations
 from ..models import RepoProfile
 
 SYSTEM = (
-    "You are DocForgeAI, an expert open-source maintainer. You write accurate, "
+    "You are RepoDocMake, an expert open-source maintainer. You write accurate, "
     "concise project documentation. Only state facts supported by the provided "
     "repository profile. Never invent install commands, package names, or APIs."
 )

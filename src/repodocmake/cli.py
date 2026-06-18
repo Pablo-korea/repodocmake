@@ -1,4 +1,4 @@
-"""Command-line entrypoint: `docforgeai generate <target> ...`."""
+"""Command-line entrypoint: `repodocmake generate <target> ...`."""
 from __future__ import annotations
 
 import os
@@ -17,7 +17,7 @@ from .pipeline import run
 @click.group()
 @click.version_option()
 def main() -> None:
-    """DocForgeAI — generate OSS docs by analyzing a repository."""
+    """RepoDocMake — generate OSS docs by analyzing a repository."""
     # Load API keys / settings from a local .env (real LLM runs), if present.
     load_dotenv()
 
@@ -29,7 +29,7 @@ def main() -> None:
 @click.option("--license", "license_id", default="Apache-2.0", help="SPDX license identifier.")
 @click.option("--holder", default=None, help="LICENSE copyright holder (else 'The <project> authors').")
 @click.option("--language", default=None,
-              help="Doc language: en | ko | ko+en (bilingual). Else DOCFORGEAI_LANGUAGE env, else en.")
+              help="Doc language: en | ko | ko+en (bilingual). Else REPODOCMAKE_LANGUAGE env, else en.")
 @click.option("--mode", type=click.Choice([m.value for m in Mode]), default="pr")
 @click.option("--out", "out_dir", default=None, help="Write generated docs to this directory.")
 @click.option("--dry-run", is_flag=True, help="Use mock LLM, do not call any API or write files.")
@@ -37,8 +37,8 @@ def main() -> None:
 @click.option("--commit", "do_commit", is_flag=True,
               help="After writing, git add + commit the docs in the target repo.")
 @click.option("--provider", default=None,
-              help="LLM provider (else DOCFORGEAI_LLM_PROVIDER env, else anthropic).")
-@click.option("--model", default=None, help="Override the LLM model (else provider default / DOCFORGEAI_LLM_MODEL).")
+              help="LLM provider (else REPODOCMAKE_LLM_PROVIDER env, else anthropic).")
+@click.option("--model", default=None, help="Override the LLM model (else provider default / REPODOCMAKE_LLM_MODEL).")
 def generate(target, files, license_id, holder, language, mode, out_dir, dry_run, force, do_commit, provider, model):
     """Analyze TARGET (path or git URL) and generate documentation.
 
@@ -47,8 +47,8 @@ def generate(target, files, license_id, holder, language, mode, out_dir, dry_run
     to also commit them there.
     """
     # Explicit flag wins; otherwise honor the single env-var switch (.env).
-    provider = provider or os.environ.get("DOCFORGEAI_LLM_PROVIDER", "anthropic")
-    language = language or os.environ.get("DOCFORGEAI_LANGUAGE", "en")
+    provider = provider or os.environ.get("REPODOCMAKE_LLM_PROVIDER", "anthropic")
+    language = language or os.environ.get("REPODOCMAKE_LANGUAGE", "en")
     config = Config(
         target=target,
         files=[DocKind(f.strip()) for f in files.split(",") if f.strip()],

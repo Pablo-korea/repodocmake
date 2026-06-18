@@ -37,8 +37,8 @@ class Config:
             files=files,
             license=os.environ.get("INPUT_LICENSE", "Apache-2.0"),
             holder=os.environ.get("INPUT_HOLDER") or None,
-            language=os.environ.get("INPUT_LANGUAGE") or os.environ.get("DOCFORGEAI_LANGUAGE") or "en",
+            language=os.environ.get("INPUT_LANGUAGE") or os.environ.get("REPODOCMAKE_LANGUAGE") or "en",
             mode=Mode(os.environ.get("INPUT_MODE", "pr")),
-            provider=os.environ.get("DOCFORGEAI_LLM_PROVIDER", os.environ.get("INPUT_LLM-PROVIDER", "anthropic")),
+            provider=os.environ.get("REPODOCMAKE_LLM_PROVIDER", os.environ.get("INPUT_LLM-PROVIDER", "anthropic")),
             force=os.environ.get("INPUT_FORCE", "false").lower() == "true",
         )

@@ -1,27 +1,27 @@
-# DocForgeAI
+# RepoDocMake
 
 > AI-powered open-source documentation generator — as a GitHub Action and a CLI.
 
-DocForgeAI scans a repository, analyzes its code, and generates OSS docs:
+RepoDocMake scans a repository, analyzes its code, and generates OSS docs:
 `README`, `LICENSE`, `CONTRIBUTING`, and `DEVELOPER_GUIDE`.
 
 ## Installation
 
 ```bash
-pip install docforgeai
+pip install repodocmake
 ```
 
 ## CLI usage
 
 ```bash
 # Generate docs in place into the current repo (writes the files here)
-docforgeai generate . --files README,CONTRIBUTING --license Apache-2.0
+repodocmake generate . --files README,CONTRIBUTING --license Apache-2.0
 
 # Run it on a locally cloned repo and commit the docs there in one step
-docforgeai generate /path/to/cloned-repo --commit
+repodocmake generate /path/to/cloned-repo --commit
 
 # Offline preview into a separate dir, no API key needed (uses a mock LLM)
-docforgeai generate . --dry-run --out ./generated-docs
+repodocmake generate . --dry-run --out ./generated-docs
 ```
 
 The CLI reads `ANTHROPIC_API_KEY` (or the relevant provider key) from a local
@@ -45,7 +45,7 @@ target; with `--out`, they go to that preview directory instead.
 
 ```yaml
 - uses: actions/checkout@v4
-- uses: Pablo-korea/docforgeai@v1
+- uses: Pablo-korea/repodocmake@v1
   with:
     files: "README,LICENSE,CONTRIBUTING,DEVELOPER_GUIDE"
     license: "Apache-2.0"
@@ -67,14 +67,14 @@ target; with `--out`, they go to that preview directory instead.
 ## LLM providers
 
 One interface via [LiteLLM](https://github.com/BerriAI/litellm). Switch with a
-single env var `DOCFORGEAI_LLM_PROVIDER`: `anthropic`, `openai`, `gemini`,
+single env var `REPODOCMAKE_LLM_PROVIDER`: `anthropic`, `openai`, `gemini`,
 `ollama`, or `enterprise-gateway` (OpenAI-compatible, pre-wired).
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-DOCFORGEAI_MOCK_LLM=1 pytest -q
+REPODOCMAKE_MOCK_LLM=1 pytest -q
 ruff check src tests
 ```
 

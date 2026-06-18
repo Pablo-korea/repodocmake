@@ -1,7 +1,7 @@
 """LLM provider abstraction built on LiteLLM.
 
 One interface, many backends. Switching provider is a single env var
-(`DOCFORGEAI_LLM_PROVIDER`) with no code change — anthropic | openai | gemini |
+(`REPODOCMAKE_LLM_PROVIDER`) with no code change — anthropic | openai | gemini |
 ollama | openrouter | enterprise-gateway. The openrouter and enterprise-gateway
 slots both route to an OpenAI-compatible endpoint.
 """
@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 
-# Default model per provider. Override with DOCFORGEAI_LLM_MODEL.
+# Default model per provider. Override with REPODOCMAKE_LLM_MODEL.
 _DEFAULT_MODELS = {
     "anthropic": "claude-sonnet-4-6",
     "openai": "gpt-4o",
@@ -29,10 +29,10 @@ class LLMClient:
         self.provider = provider
         self.model = (
             model
-            or os.environ.get("DOCFORGEAI_LLM_MODEL")
+            or os.environ.get("REPODOCMAKE_LLM_MODEL")
             or _DEFAULT_MODELS.get(provider, "claude-sonnet-4-6")
         )
-        self.mock = mock or os.environ.get("DOCFORGEAI_MOCK_LLM") == "1"
+        self.mock = mock or os.environ.get("REPODOCMAKE_MOCK_LLM") == "1"
 
     def complete(self, system: str, user: str) -> str:
         if self.mock:
@@ -50,8 +50,8 @@ class LLMClient:
 
         kwargs: dict = {}
         if self.provider == "enterprise-gateway":
-            kwargs["api_base"] = os.environ["DOCFORGEAI_GATEWAY_URL"]
-            kwargs["api_key"] = os.environ.get("DOCFORGEAI_GATEWAY_API_KEY", "")
+            kwargs["api_base"] = os.environ["REPODOCMAKE_GATEWAY_URL"]
+            kwargs["api_key"] = os.environ.get("REPODOCMAKE_GATEWAY_API_KEY", "")
 
         resp = litellm.completion(
             model=self.model,

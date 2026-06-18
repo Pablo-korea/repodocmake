@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-from docforgeai import vcs
+from repodocmake import vcs
 
 
 def _git(args, cwd):
@@ -29,7 +29,7 @@ def test_commit_mode_commits_generated_docs(tmp_path):
 
     assert committed is True
     assert "README.md" in _git(["ls-files"], repo).splitlines()
-    assert "[docforgeai]" in _git(["log", "-1", "--pretty=%s"], repo)
+    assert "[repodocmake]" in _git(["log", "-1", "--pretty=%s"], repo)
 
 
 def test_commit_mode_is_noop_when_nothing_changed(tmp_path):
@@ -53,11 +53,11 @@ def test_pr_mode_pushes_branch_and_skips_pr_without_token(tmp_path, monkeypatch)
     _git(["remote", "add", "origin", str(remote)], repo)
     (repo / "CONTRIBUTING.md").write_text("# contributing\n", encoding="utf-8")
 
-    url = vcs.pr_mode(str(repo), ["CONTRIBUTING.md"], branch="docforgeai/update-docs")
+    url = vcs.pr_mode(str(repo), ["CONTRIBUTING.md"], branch="repodocmake/update-docs")
 
     assert url is None                                   # no token -> PR skipped
     remote_branches = _git(["ls-remote", "--heads", "origin"], repo)
-    assert "docforgeai/update-docs" in remote_branches     # branch was pushed
+    assert "repodocmake/update-docs" in remote_branches     # branch was pushed
 
 
 def test_pr_mode_returns_none_when_no_changes(tmp_path, monkeypatch):

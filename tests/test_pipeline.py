@@ -1,9 +1,9 @@
 from pathlib import Path
 
-import docforgeai.pipeline as pipeline
-from docforgeai.config import Config
-from docforgeai.models import DocKind, GeneratedDoc, RepoProfile
-from docforgeai.pipeline import _consistency_issues, missing_docs, run
+import repodocmake.pipeline as pipeline
+from repodocmake.config import Config
+from repodocmake.models import DocKind, GeneratedDoc, RepoProfile
+from repodocmake.pipeline import _consistency_issues, missing_docs, run
 
 
 def _repo(tmp_path: Path) -> Path:

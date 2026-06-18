@@ -15,7 +15,7 @@ venv/
 .pytest_cache/
 .ruff_cache/
 
-# DocForgeAI local previews
+# RepoDocMake local previews
 dryrun-out/
 generated-docs/
 *-preview/
