@@ -1,0 +1,50 @@
+name: "DocForgeAI"
+description: "AI-powered open-source documentation generator. Analyzes the repo and generates README, LICENSE, CONTRIBUTING, DEVELOPER_GUIDE."
+author: "DevOps_Agent"
+branding:
+  icon: "file-text"
+  color: "purple"
+
+inputs:
+  files:
+    description: "Comma-separated doc kinds to generate (README,LICENSE,CONTRIBUTING,DEVELOPER_GUIDE)."
+    required: false
+    default: "README,LICENSE,CONTRIBUTING,DEVELOPER_GUIDE"
+  license:
+    description: "SPDX license identifier (MIT, Apache-2.0, BSD-3-Clause)."
+    required: false
+    default: "Apache-2.0"
+  holder:
+    description: "LICENSE copyright holder. Defaults to 'The <project> authors'."
+    required: false
+    default: ""
+  language:
+    description: "Doc language: en | ko | ko+en (bilingual)."
+    required: false
+    default: "en"
+  mode:
+    description: "pr | commit | check"
+    required: false
+    default: "pr"
+  llm-provider:
+    description: "anthropic | openai | gemini | ollama | enterprise-gateway"
+    required: false
+    default: "anthropic"
+  force:
+    description: "Overwrite existing documentation."
+    required: false
+    default: "false"
+
+outputs:
+  generated-count:
+    description: "Number of documents generated."
+  generated-files:
+    description: "Comma-separated list of generated file names."
+  missing-files:
+    description: "Comma-separated docs found missing in check mode."
+  pr-url:
+    description: "URL of the pull request opened in pr mode (if any)."
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
